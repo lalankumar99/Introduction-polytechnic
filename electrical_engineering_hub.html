@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical Engineering Hub – SBTE Bihar</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS Variables - Premium Electric Theme */
+        :root {
+            --primary: #00D4FF;
+            --secondary: #6A00FF;
+            --accent: #00FFF0;
+            --bg-dark: #07070A;
+            --bg-panel: rgba(15, 15, 25, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(0, 212, 255, 0.15);
+            --text-main: #FFFFFF;
+            --text-muted: #A0AEC0;
+            --gradient-1: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-2: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6, .nav-logo {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Typography & Gradients */
+        .neon-text {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-2);
+            border-radius: 2px;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Canvas Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            opacity: 0.6;
+        }
+
+        /* Glowing Orbs for Depth */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .orb-1 { top: 10%; left: -10%; width: 400px; height: 400px; background: var(--secondary); }
+        .orb-2 { bottom: 20%; right: -10%; width: 500px; height: 500px; background: var(--primary); }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .glass-card:hover::before { left: 100%; }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.1);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(7, 7, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .nav-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo i { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px;
+            background: var(--accent); transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Layout & Sections */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gradient-2);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content { max-width: 800px; z-index: 10; }
+        .hero-title { font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
+
+        /* Roadmap Section (Timeline) */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: ''; position: absolute; width: 4px; background: var(--glass-border);
+            top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px; position: relative; background-color: inherit; width: 50%;
+        }
+
+        .timeline-item::after {
+            content: ''; position: absolute; width: 20px; height: 20px; right: -10px;
+            background: var(--bg-dark); border: 4px solid var(--primary); top: 15px;
+            border-radius: 50%; z-index: 1; box-shadow: 0 0 10px var(--primary);
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -10px; }
+
+        .timeline-content {
+            padding: 20px; background: var(--glass-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+        }
+        
+        .timeline-content h3 { color: var(--accent); margin-bottom: 10px; }
+        .timeline-content ul { list-style: none; color: var(--text-muted); }
+        .timeline-content ul li { margin-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+        .timeline-content ul li i { color: var(--primary); font-size: 0.8rem; }
+
+        /* Interactive Tools Section */
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); }
+        .form-control {
+            width: 100%; padding: 10px 15px; border-radius: 8px;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            color: #fff; font-family: inherit;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+        
+        .chart-container { display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 1rem;}
+        #attendanceCanvas { width: 150px; height: 150px; }
+
+        /* Subject / Card Grids */
+        .card-icon {
+            width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 212, 255, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .subject-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .subject-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        .badge {
+            background: rgba(106, 0, 255, 0.2); color: #fff; padding: 4px 10px;
+            border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--secondary);
+            display: inline-block; margin-right: 5px; margin-bottom: 5px;
+        }
+
+        /* FAQ Section */
+        .faq-search { margin-bottom: 2rem; max-width: 600px; margin: 0 auto 2rem auto; }
+        .accordion { display: flex; flex-direction: column; gap: 1rem; max-width: 800px; margin: 0 auto; }
+        .accordion-item { border: 1px solid var(--glass-border); border-radius: 12px; background: var(--glass-bg); overflow: hidden; }
+        .accordion-header {
+            padding: 1.2rem; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; background: rgba(255,255,255,0.02);
+        }
+        .accordion-header i { transition: 0.3s; color: var(--primary); }
+        .accordion-content {
+            padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+            color: var(--text-muted);
+        }
+        .accordion-item.active .accordion-content { padding: 1.2rem; border-top: 1px solid var(--glass-border); }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+
+        /* Footer */
+        footer {
+            background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);
+            padding: 3rem 5% 1.5rem; text-align: center;
+        }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 2rem;}
+        .footer-brand h2 { margin-bottom: 0.5rem; }
+        .footer-credits { color: var(--text-muted); font-size: 0.9rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .dev-badge { color: var(--accent); font-weight: bold; }
+
+        /* Scroll Animation Class */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s all cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .hero-title { font-size: 3rem; }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 21px; }
+            .left, .right { left: 0; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed; top: 70px; right: -100%; width: 250px; height: 100vh;
+                background: rgba(11, 11, 15, 0.95); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 2rem; transition: 0.4s;
+                border-left: 1px solid var(--glass-border);
+            }
+            .nav-links.active { right: 0; }
+            .mobile-menu-btn { display: block; }
+            .hero-buttons { flex-direction: column; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Decorative Glows -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">
+            <i class="fas fa-bolt"></i> EE Hub
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+            <li><a href="#career">Career</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="mobile-menu-btn" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="hero-content reveal active">
+            <div class="badge" style="margin-bottom: 20px;"><i class="fas fa-graduation-cap"></i> SBTE Bihar Polytechnic</div>
+            <h1 class="hero-title">Master <span class="neon-text">Electrical Engineering</span></h1>
+            <p class="hero-subtitle">The Complete Guide & Roadmap for Diploma Electrical Engineering Students. Developed for the future Engineers of Bihar.</p>
+            <div class="hero-buttons">
+                <a href="#roadmap" class="btn btn-primary">Explore Roadmap</a>
+                <a href="#resources" class="btn btn-outline">Study Resources</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title reveal">What is Electrical Engineering?</h2>
+        <div class="grid-container">
+            <div class="glass-card reveal">
+                <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>परिचय (Introduction)</h3>
+                <p>Electrical Engineering इंजीनियरिंग की वह शाखा है जो Electricity, Electromagnetism, और Electronics के अध्ययन और अनुप्रयोग (application) से संबंधित है। यह आधुनिक दुनिया की रीढ़ है।</p>
+            </div>
+            <div class="glass-card reveal" style="transition-delay: 0.1s;">
+                <div class="card-icon"><i class="fas fa-industry"></i></div>
+                <h3>महत्व (Importance)</h3>
+                <p>हमारे घरों की बिजली से लेकर विशाल Power Plants, Electric Vehicles (EV), और Automation तक, हर जगह Electrical Engineers की आवश्यकता है।</p>
+            </div>
+            <div class="glass-card reveal" style="transition-delay: 0.2s;">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Why Choose EE?</h3>
+                <p>Government Jobs (JE), PSU (NTPC, PowerGrid), Private Sector Automation, और Entrepreneurship में असीमित अवसर उपलब्ध हैं।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <h2 class="section-title reveal">Complete SBTE Roadmap</h2>
+        <p style="text-align:center; color: var(--text-muted); margin-bottom: 3rem;">Semester-wise Journey from 1st to 6th Semester</p>
+        
+        <div class="timeline">
+            <!-- Sem 1 -->
+            <div class="timeline-item left reveal">
+                <div class="timeline-content">
+                    <h3>Semester 1</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Basic Engineering Mathematics</li>
+                        <li><i class="fas fa-check-circle"></i> Applied Physics</li>
+                        <li><i class="fas fa-check-circle"></i> Basic Electrical Engineering</li>
+                        <li><i class="fas fa-check-circle"></i> Engineering Drawing</li>
+                        <li><i class="fas fa-check-circle"></i> Fundamental of IT</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sem 2 -->
+            <div class="timeline-item right reveal">
+                <div class="timeline-content">
+                    <h3>Semester 2</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Applied Mathematics</li>
+                        <li><i class="fas fa-check-circle"></i> Applied Chemistry</li>
+                        <li><i class="fas fa-check-circle"></i> Communication Skills</li>
+                        <li><i class="fas fa-check-circle"></i> Fundamentals of Electronic Engg.</li>
+                        <li><i class="fas fa-check-circle"></i> Engineering Mechanics</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sem 3 -->
+            <div class="timeline-item left reveal">
+                <div class="timeline-content">
+                    <h3>Semester 3 <span class="badge">Core Start</span></h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Electrical Circuit and Network</li>
+                        <li><i class="fas fa-check-circle"></i> Electrical Measurements</li>
+                        <li><i class="fas fa-check-circle"></i> DC Machines and Transformers</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sem 4 -->
+            <div class="timeline-item right reveal">
+                <div class="timeline-content">
+                    <h3>Semester 4</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> AC Machines</li>
+                        <li><i class="fas fa-check-circle"></i> Power Electronics</li>
+                        <li><i class="fas fa-check-circle"></i> Microprocessor</li>
+                        <li><i class="fas fa-check-circle"></i> Control System and PLC</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sem 5 -->
+            <div class="timeline-item left reveal">
+                <div class="timeline-content">
+                    <h3>Semester 5 <span class="badge">Advanced</span></h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Switchgear and Protection</li>
+                        <li><i class="fas fa-check-circle"></i> Solar and Wind Energy</li>
+                        <li><i class="fas fa-check-circle"></i> Energy Conservation</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sem 6 -->
+            <div class="timeline-item right reveal">
+                <div class="timeline-content">
+                    <h3>Semester 6 <span class="badge">Final Step</span></h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Utilization of Electrical Energy</li>
+                        <li><i class="fas fa-check-circle"></i> Electrical Installation</li>
+                        <li><i class="fas fa-check-circle"></i> Industrial Drives</li>
+                        <li><i class="fas fa-check-circle"></i> Project Work</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Explorer -->
+    <section id="subjects">
+        <h2 class="section-title reveal">Subject Explorer</h2>
+        <div class="grid-container">
+            <div class="glass-card subject-card reveal">
+                <span class="badge">Sem 3</span>
+                <h3>Circuit & Network</h3>
+                <p>Kirchhoff's laws, Theorems (Thevenin, Norton), AC fundamentals. यह पूरे Electrical Engineering का आधार है।</p>
+                <div style="color: var(--accent); font-size: 0.9rem;">Weightage: High | Career: Core Design</div>
+            </div>
+            <div class="glass-card subject-card reveal">
+                <span class="badge">Sem 3 & 4</span>
+                <h3>Electrical Machines</h3>
+                <p>Transformers, DC Motors, Induction Motors और Alternators की working और construction.</p>
+                <div style="color: var(--accent); font-size: 0.9rem;">Weightage: Very High | Career: PSU, Core Industry</div>
+            </div>
+            <div class="glass-card subject-card reveal">
+                <span class="badge">Sem 4</span>
+                <h3>Power Electronics</h3>
+                <p>Thyristors, Inverters, Choppers. Electric Vehicles और modern control systems में इसका सबसे ज्यादा उपयोग है।</p>
+                <div style="color: var(--accent); font-size: 0.9rem;">Weightage: Medium | Career: EV, Automation</div>
+            </div>
+            <div class="glass-card subject-card reveal">
+                <span class="badge">Sem 5</span>
+                <h3>Switchgear & Protection</h3>
+                <p>Relays, Circuit Breakers, और power system protection. Grid failures से बचने के लिए महत्वपूर्ण।</p>
+                <div style="color: var(--accent); font-size: 0.9rem;">Weightage: High | Career: Power Grid, State Board</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Opportunities -->
+    <section id="career">
+        <h2 class="section-title reveal">Career Opportunities</h2>
+        <div class="grid-container">
+            <div class="glass-card reveal">
+                <div class="card-icon"><i class="fas fa-landmark"></i></div>
+                <h3>Government Jobs (JE)</h3>
+                <ul style="list-style: none; color: var(--text-muted); margin-top: 1rem;">
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--primary)"></i> <strong>SSC JE:</strong> CPWD, MES etc.</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--primary)"></i> <strong>RRB JE:</strong> Indian Railways</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--primary)"></i> <strong>State Boards:</strong> BSPHCL (Bihar)</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--primary)"></i> <strong>PSUs:</strong> PGCIL, NTPC, NHPC, DVC</li>
+                </ul>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #fff;">Starting Salary: ₹35,000 - ₹50,000 / month</p>
+            </div>
+            <div class="glass-card reveal">
+                <div class="card-icon"><i class="fas fa-building"></i></div>
+                <h3>Private Sector & Tech</h3>
+                <ul style="list-style: none; color: var(--text-muted); margin-top: 1rem;">
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--accent)"></i> <strong>Core Companies:</strong> Tata Power, L&T, Adani</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--accent)"></i> <strong>Automation:</strong> Siemens, ABB, Schneider</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--accent)"></i> <strong>Renewable:</strong> Solar plants, Wind energy</li>
+                    <li style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="color:var(--accent)"></i> <strong>EV Industry:</strong> Battery design, Motor control</li>
+                </ul>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #fff;">Starting Salary: ₹15,000 - ₹30,000 / month</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Colleges in Bihar -->
+    <section id="colleges">
+        <h2 class="section-title reveal">Best Govt. Colleges in Bihar</h2>
+        <div class="grid-container">
+            <div class="glass-card reveal">
+                <h3>GP Bhagalpur</h3>
+                <p>One of the oldest and most reputed government polytechnics with excellent EE faculty and alumni network.</p>
+            </div>
+            <div class="glass-card reveal">
+                <h3>GP Barauni</h3>
+                <p>Located near industrial hub (Refinery, Thermal Power), offering great practical exposure.</p>
+            </div>
+            <div class="glass-card reveal">
+                <h3>GP Darbhanga</h3>
+                <p>Known for good infrastructure and disciplined academic environment under SBTE.</p>
+            </div>
+            <div class="glass-card reveal">
+                <h3>GP Banka</h3>
+                <p>Emerging institute with modern labs and growing placement opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Tools Dashboard -->
+    <section id="tools">
+        <h2 class="section-title reveal">Student Dashboard Tools</h2>
+        <div class="tools-grid">
+            <!-- SGPA Calculator -->
+            <div class="glass-card reveal">
+                <h3><i class="fas fa-calculator" style="color:var(--primary)"></i> SGPA Calculator</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; color:var(--text-muted);">Enter marks out of 100 for 5 subjects to estimate SGPA.</p>
+                <div class="form-group">
+                    <input type="number" id="sub1" class="form-control" placeholder="Subject 1 Marks (0-100)" max="100" min="0">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="sub2" class="form-control" placeholder="Subject 2 Marks (0-100)" max="100" min="0">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="sub3" class="form-control" placeholder="Subject 3 Marks (0-100)" max="100" min="0">
+                </div>
+                <button class="btn btn-primary" onclick="calculateSGPA()" style="width: 100%; margin-top: 10px;">Calculate</button>
+                <div id="sgpaResult" style="margin-top: 15px; font-size: 1.5rem; text-align: center; font-weight: bold; color: var(--accent);"></div>
+            </div>
+
+            <!-- Attendance Tracker -->
+            <div class="glass-card reveal chart-container">
+                <h3 style="align-self: flex-start;"><i class="fas fa-user-check" style="color:var(--primary)"></i> Attendance Tracker</h3>
+                <canvas id="attendanceCanvas"></canvas>
+                <div id="attendanceText" style="font-size: 1.2rem; font-weight: bold;">0%</div>
+                
+                <div style="display: flex; gap: 10px; width: 100%; margin-top: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Classes Attended</label>
+                        <input type="number" id="att-attended" class="form-control" value="0" min="0">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Total Classes</label>
+                        <input type="number" id="att-total" class="form-control" value="0" min="0">
+                    </div>
+                </div>
+                <button class="btn btn-outline" onclick="updateAttendance()" style="width: 100%;">Update & Save</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comprehensive FAQ Section -->
+    <section id="faq">
+        <h2 class="section-title reveal">Frequently Asked Questions</h2>
+        
+        <div class="faq-search reveal">
+            <input type="text" id="faqSearchInput" class="form-control" placeholder="Search questions... (e.g., placement, salary, subjects)" onkeyup="filterFAQ()">
+        </div>
+
+        <div class="accordion" id="faqAccordion">
+            <!-- JS will inject 30 FAQs here -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2 class="neon-text"><i class="fas fa-bolt"></i> EE HUB</h2>
+                <p>SBTE Bihar Polytechnic Guide</p>
+            </div>
+            <div class="footer-links">
+                <h3 style="margin-bottom: 10px; font-size: 1.2rem;">Quick Links</h3>
+                <ul style="list-style: none; color: var(--text-muted);">
+                    <li><a href="https://sbte.bihar.gov.in/" target="_blank" style="color:inherit; text-decoration:none;">SBTE Official Website</a></li>
+                    <li><a href="#roadmap" style="color:inherit; text-decoration:none;">Semester Roadmap</a></li>
+                    <li><a href="#tools" style="color:inherit; text-decoration:none;">Student Tools</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-credits">
+            <p>Developed with <i class="fas fa-heart" style="color: #ff3366;"></i> by <span class="dev-badge">Lalan Kumar</span></p>
+            <p style="margin-top: 5px; font-size: 0.8rem;">Powered By: <strong>LK STUDY STUDIO</strong> | Source: SBTE Bihar, Dept. of Electrical Engineering</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ----------------------------------------------------
+        // 1. Mobile Menu Toggle
+        // ----------------------------------------------------
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('active');
+        }
+
+        // ----------------------------------------------------
+        // 2. Intersection Observer for Scroll Animations
+        // ----------------------------------------------------
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Optional: Stop observing once revealed
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ----------------------------------------------------
+        // 3. Particle Background Canvas (Vanilla JS)
+        // ----------------------------------------------------
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = window.innerWidth < 768 ? 40 : 80;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1;
+                this.vy = (Math.random() - 0.5) * 1;
+                this.radius = Math.random() * 2 + 1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.5)';
+                ctx.fill();
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => p.update());
+            
+            // Connect particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(106, 0, 255, ${0.2 - dist/600})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+
+        // ----------------------------------------------------
+        // 4. Interactive Tools Logic
+        // ----------------------------------------------------
+        
+        // SGPA Calculator
+        function calculateSGPA() {
+            const s1 = parseFloat(document.getElementById('sub1').value) || 0;
+            const s2 = parseFloat(document.getElementById('sub2').value) || 0;
+            const s3 = parseFloat(document.getElementById('sub3').value) || 0;
+            
+            // Simple dummy logic for demonstration (assuming equal credits)
+            // Poly grades: 80+ is ~9 pointer, etc. 
+            // Here we just calculate percentage and map to 10 point scale loosely.
+            const total = s1 + s2 + s3;
+            if (total === 0) return;
+            
+            const percentage = total / 3;
+            let sgpa = (percentage / 9.5).toFixed(2); 
+            if(sgpa > 10) sgpa = 10;
+
+            document.getElementById('sgpaResult').innerText = `Est. SGPA: ${sgpa}`;
+        }
+
+        // Attendance Tracker (Canvas Donut Chart + LocalStorage)
+        const attCanvas = document.getElementById('attendanceCanvas');
+        const attCtx = attCanvas.getContext('2d');
+        attCanvas.width = 150;
+        attCanvas.height = 150;
+
+        function drawAttendanceChart(percentage) {
+            attCtx.clearRect(0, 0, attCanvas.width, attCanvas.height);
+            const cx = attCanvas.width / 2;
+            const cy = attCanvas.height / 2;
+            const radius = 60;
+            
+            // Background Circle
+            attCtx.beginPath();
+            attCtx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            attCtx.lineWidth = 12;
+            attCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+            attCtx.stroke();
+
+            // Progress Arc
+            attCtx.beginPath();
+            const endAngle = (percentage / 100) * (2 * Math.PI) - (0.5 * Math.PI);
+            attCtx.arc(cx, cy, radius, -0.5 * Math.PI, endAngle);
+            attCtx.lineWidth = 12;
+            attCtx.lineCap = 'round';
+            attCtx.strokeStyle = percentage >= 75 ? '#00FFF0' : (percentage >= 60 ? '#FFD700' : '#FF3366');
+            attCtx.stroke();
+            
+            document.getElementById('attendanceText').innerText = `${percentage.toFixed(1)}%`;
+            document.getElementById('attendanceText').style.color = percentage >= 75 ? '#00FFF0' : (percentage >= 60 ? '#FFD700' : '#FF3366');
+        }
+
+        function updateAttendance() {
+            const attended = parseInt(document.getElementById('att-attended').value) || 0;
+            const total = parseInt(document.getElementById('att-total').value) || 0;
+            
+            let percentage = 0;
+            if (total > 0) percentage = (attended / total) * 100;
+            if (percentage > 100) percentage = 100;
+
+            drawAttendanceChart(percentage);
+
+            // Save to LocalStorage
+            localStorage.setItem('ee_att_attended', attended);
+            localStorage.setItem('ee_att_total', total);
+        }
+
+        // Load data on start
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedAtt = localStorage.getItem('ee_att_attended');
+            const savedTotal = localStorage.getItem('ee_att_total');
+            if(savedAtt !== null) document.getElementById('att-attended').value = savedAtt;
+            if(savedTotal !== null) document.getElementById('att-total').value = savedTotal;
+            updateAttendance();
+        });
+
+        // ----------------------------------------------------
+        // 5. Generate 30 FAQs and Accordion Logic
+        // ----------------------------------------------------
+        const faqs = [
+            { q: "Electrical Engineering (EE) क्या है?", a: "यह इंजीनियरिंग की शाखा है जो Electricity, Electronics और Electromagnetism के अध्ययन से संबंधित है।" },
+            { q: "Polytechnic EE कोर्स की duration कितनी है?", a: "SBTE Bihar के तहत यह 3 साल (6 Semesters) का डिप्लोमा कोर्स है।" },
+            { q: "Lateral Entry से admission कैसे लें?", a: "12th Science (PCM) या ITI पास छात्र BCECE LE एग्जाम देकर सीधे 2nd year (3rd sem) में एडमिशन ले सकते हैं।" },
+            { q: "Diploma in EE के बाद Government Jobs कौन सी हैं?", a: "SSC JE, RRB JE, State Electricity Boards (BSPHCL), PGCIL, DMRC आदि में Junior Engineer के पद पर जॉब मिल सकती है।" },
+            { q: "Private sector में EE का scope कैसा है?", a: "Automation, Manufacturing, Solar, Electric Vehicles (EV) और Core companies (Tata Power, L&T) में भारी डिमांड है।" },
+            { q: "EE और Electronics (ECE) में क्या अंतर है?", a: "EE मुख्य रूप से High Voltage (Power, Machines) पर फोकस करता है, जबकि ECE Low Voltage (Microchips, Communication) पर।" },
+            { q: "Junior Engineer (JE) कैसे बनें?", a: "Diploma पूरा करने के बाद आपको SSC, RRB या State Govt द्वारा आयोजित JE competitive exams क्लियर करने होते हैं।" },
+            { q: "SBTE Bihar का full form क्या है?", a: "State Board of Technical Education, Bihar." },
+            { q: "BSPHCL में Diploma वालों के लिए क्या मौका है?", a: "Bihar State Power Holding Company Limited नियमित रूप से Junior Electrical Engineer (JEE) की भर्ती निकालता है।" },
+            { q: "क्या Diploma के बाद B.Tech कर सकते हैं?", a: "हाँ, आप B.Tech (LEET) एग्जाम देकर सीधे Engineering College के 2nd Year में एडमिशन (B.Tech Lateral Entry) ले सकते हैं।" },
+            { q: "Semester Exams में पासिंग मार्क्स क्या हैं?", a: "Theory पेपर 70 मार्क्स का होता है, जिसमें पास होने के लिए न्यूनतम 28 मार्क्स चाहिए होते हैं।" },
+            { q: "EE में सबसे कठिन subject कौन सा माना जाता है?", a: "आमतौर पर छात्रों को Electrical Machines, Network Theory और Power Electronics में अधिक मेहनत करनी पड़ती है।" },
+            { q: "Practical Labs का क्या महत्व है?", a: "Electrical Engineering पूरी तरह practical आधारित है। बिना सर्किट जोड़े और मशीन चलाए इंडस्ट्री में काम करना मुश्किल है।" },
+            { q: "PLC और SCADA क्या है?", a: "ये Industrial Automation के टूल्स हैं। PLC (Programmable Logic Controller) मशीनों को कण्ट्रोल करता है, और SCADA उसे मॉनिटर करता है।" },
+            { q: "AutoCAD Electrical सीखना ज़रूरी है क्या?", a: "यदि आप Design field में जाना चाहते हैं (Panel designing, Wiring layouts), तो AutoCAD Electrical बहुत फायदेमंद है।" },
+            { q: "Placement के लिए Resume कैसे बनायें?", a: "Resume में अपनी Skills (PLC, AutoCAD), Major Project, और Industrial Training को highlight करें।" },
+            { q: "एक Fresher Diploma Engineer की Average Salary कितनी होती है?", a: "Private sector में शुरुआत ₹15,000-₹25,000 प्रति माह से होती है, अनुभव के साथ यह तेजी से बढ़ती है।" },
+            { q: "Government job की starting salary कितनी होती है?", a: "JE के पद पर starting salary लगभग ₹35,000 से ₹45,000+ (Pay Matrix Level 6) होती है।" },
+            { q: "Bihar में EE के लिए Best Govt. Polytechnic कौन से हैं?", a: "GP Bhagalpur, NGP Patna 13, GP Darbhanga, GP Barauni को टॉप संस्थानों में गिना जाता है।" },
+            { q: "PYQ (Previous Year Questions) कहाँ मिलेंगे?", a: "आप SBTE की वेबसाइट या सीनियर छात्रों से PYQs प्राप्त कर सकते हैं।" },
+            { q: "Industrial Training (Internship) कहाँ से करें?", a: "NTPC, Railway Workshops, State Grid Stations, या किसी भी Manufacturing plant से 4-weeks की ट्रेनिंग कर सकते हैं।" },
+            { q: "Apprenticeship क्या होती है?", a: "डिप्लोमा के बाद 1 साल की On-job training होती है जिसे Apprenticeship (NATS) कहते हैं। इसमें stipend भी मिलता है।" },
+            { q: "Entrepreneurship (Business) कैसे शुरू करें?", a: "आप Electrical Contractor का लाइसेंस लेकर Wiring, Panel assembly, या Solar installation का बिज़नेस कर सकते हैं।" },
+            { q: "Future scope क्या है?", a: "Renewable Energy (Solar/Wind) और Electric Vehicles (EV) के कारण EE का भविष्य बहुत सुरक्षित और डिमांडिंग है।" },
+            { q: "Electric Traction क्या है?", a: "यह रेलवे में इलेक्ट्रिक इंजनों (Locomotives) के संचालन की स्टडी है। Railway JE के लिए यह महत्वपूर्ण है।" },
+            { q: "Microprocessor (Sem 4) का क्या उपयोग है?", a: "यह आधुनिक कण्ट्रोल सिस्टम्स और इलेक्ट्रॉनिक्स उपकरणों का दिमाग है, इसे समझना automation के लिए ज़रूरी है।" },
+            { q: "क्या diploma के साथ SSC JE की तैयारी की जा सकती है?", a: "बिल्कुल, 4th सेमेस्टर से ही टेक्निकल और नॉन-टेक्निकल (Reasoning, GK) पढ़ना शुरू कर देना चाहिए।" },
+            { q: "Viva-voce में कैसे सवाल पूछे जाते हैं?", a: "इसमें सीधे concepts, definitions, और आपके द्वारा किये गए practical/project की वर्किंग के बारे में पूछा जाता है।" },
+            { q: "Project Work (Sem 6) कैसे चुनें?", a: "ऐसा टॉपिक चुनें जो समाज की समस्या सुलझाए, जैसे Smart Grid, Solar Inverter, या Home Automation system." },
+            { q: "Electrical Engineering में Girls के लिए कैसा scope है?", a: "बेहतरीन स्कोप है। Design, Testing, PSU jobs और Teaching/R&D में लड़कियाँ बहुत अच्छा कर रही हैं।" }
+        ];
+
+        const faqContainer = document.getElementById('faqAccordion');
+        
+        // Render FAQs
+        function renderFAQs(faqList) {
+            faqContainer.innerHTML = '';
+            faqList.forEach((faq, index) => {
+                const item = document.createElement('div');
+                item.className = 'accordion-item reveal';
+                item.innerHTML = `
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>${index + 1}. ${faq.q}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p style="padding-bottom: 1rem;">${faq.a}</p>
+                    </div>
+                `;
+                faqContainer.appendChild(item);
+            });
+            // Re-observe new elements
+            document.querySelectorAll('.accordion-item.reveal').forEach(el => observer.observe(el));
+        }
+
+        renderFAQs(faqs);
+
+        // Accordion Toggle
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const content = item.querySelector('.accordion-content');
+            
+            // Close others (optional)
+            /* document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                if(otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.accordion-content').style.maxHeight = null;
+                }
+            }); */
+
+            item.classList.toggle('active');
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        }
+
+        // FAQ Search Filter
+        function filterFAQ() {
+            const input = document.getElementById('faqSearchInput').value.toLowerCase();
+            const filteredFaqs = faqs.filter(faq => 
+                faq.q.toLowerCase().includes(input) || faq.a.toLowerCase().includes(input)
+            );
+            renderFAQs(filteredFaqs);
+        }
+
+        // Smooth Scroll Offset for sticky navbar
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetEl = document.querySelector(targetId);
+                const headerOffset = 80;
+                const elementPosition = targetEl.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+                window.scrollTo({
+                     top: offsetPosition,
+                     behavior: "smooth"
+                });
+
+                // Close mobile menu if open
+                const nav = document.getElementById('navLinks');
+                if(nav.classList.contains('active')) nav.classList.remove('active');
+            });
+        });
+
+    </script>
+</body>
+</html>
