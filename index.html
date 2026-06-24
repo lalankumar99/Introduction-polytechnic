@@ -213,6 +213,117 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* ================= POLYTECHNIC HUB PORTAL MENU ================= */
+
+.portal-menu{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+padding:25px;
+margin:25px auto;
+max-width:1200px;
+}
+
+.portal-menu a{
+position:relative;
+overflow:hidden;
+
+padding:15px 28px;
+
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,0.12);
+border-radius:18px;
+
+color:#ffffff;
+text-decoration:none;
+
+font-size:16px;
+font-weight:700;
+
+transition:all .4s ease;
+
+box-shadow:
+0 8px 25px rgba(0,0,0,.35),
+inset 0 0 15px rgba(255,255,255,.04);
+
+}
+
+.portal-menu a::before{
+content:'';
+position:absolute;
+top:0;
+left:-100%;
+
+width:100%;
+height:100%;
+
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.20),
+transparent);
+
+transition:.7s;
+
+}
+
+.portal-menu a:hover::before{
+left:100%;
+}
+
+.portal-menu a:hover{
+transform:translateY(-6px) scale(1.04);
+
+border-color:#00f3ff;
+
+color:#00f3ff;
+
+box-shadow:
+0 0 20px rgba(0,243,255,.40),
+0 0 40px rgba(0,243,255,.25);
+
+}
+
+.portal-menu a:nth-child(1){
+border-left:4px solid #00f3ff;
+}
+
+.portal-menu a:nth-child(2){
+border-left:4px solid #00ff88;
+}
+
+.portal-menu a:nth-child(3){
+border-left:4px solid #ffb800;
+}
+
+.portal-menu a:nth-child(4){
+border-left:4px solid #ff4d4d;
+}
+
+.portal-menu a:nth-child(5){
+border-left:4px solid #bd00ff;
+}
+
+@media(max-width:768px){
+
+.portal-menu{
+gap:12px;
+padding:15px;
+}
+
+.portal-menu a{
+width:100%;
+text-align:center;
+padding:14px;
+}
+
+}
+
         /* ================= HERO SECTION ================= */
         .hero {
             min-height: 100vh;
@@ -844,6 +955,30 @@
             <i class="fa-solid fa-bell"></i> बिहार पॉलिटेक्निक 2026 चॉइस फिलिंग की प्रक्रिया शुरू हो चुकी है। कृपया अंतिम तिथि से पहले अपने चॉइस लॉक करें। | प्रथम सीट आवंटन (First Seat Allotment) का परिणाम जल्द ही घोषित किया जाएगा।
         </div>
     </div>
+    </div>
+<section class="portal-menu">
+
+    <a href="index.html">🏠 Home</a>
+
+    <a href="computer_science_engineering_hub.html">
+        💻 Computer Science
+    </a>
+
+    <a href="electrical_engineering_hub.html">
+        ⚡ Electrical Engineering
+    </a>
+
+    <a href="#">🏗️ Civil Engineering</a>
+
+    <a href="#">⚙️ Mechanical Engineering</a>
+
+    <a href="#">📚 Study Materials</a>
+
+    <a href="#">📝 Notes & PYQ</a>
+
+    <a href="#">🎯 Polytechnic Preparation</a>
+
+</section>
 
     <!-- 1. Hero Section -->
     <header class="hero">
