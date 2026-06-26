@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Premium World-Class Mechanical Engineering Hub for SBTE Bihar Diploma Students. Master machines, manufacturing, and design.">
+    <meta name="theme-color" content="#0B0B0F">
+    <title>Mechanical Engineering Hub | LK STUDY STUDIO</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ========================
+           CSS VARIABLES & RESET
+           ======================== */
+        :root {
+            --bg-color: #0B0B0F;
+            --primary: #00D4FF;
+            --secondary: #7A00FF;
+            --accent: #00FFF0;
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0B0;
+            --glass-bg: rgba(15, 15, 25, 0.6);
+            --glass-border: rgba(0, 212, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --neon-glow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 40px var(--secondary);
+            --gradient-text: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 { font-family: 'Orbitron', sans-serif; }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Matrix Canvas */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* Layout & Utilities */
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--neon-glow);
+            border-color: var(--primary);
+        }
+        
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--bg-color);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+        .btn:hover::before { width: 100%; }
+        .btn:hover {
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: none;
+        }
+        .btn-outline::before { background: var(--primary); }
+
+        /* ========================
+           NAVIGATION
+           ======================== */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1rem 5%;
+            background: rgba(11, 11, 15, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        .nav-links li a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s, text-shadow 0.3s;
+            position: relative;
+        }
+        .nav-links li a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--primary);
+            transition: width 0.3s;
+        }
+        .nav-links li a:hover { color: var(--primary); text-shadow: 0 0 5px var(--primary); }
+        .nav-links li a:hover::after { width: 100%; }
+        
+        .menu-toggle {
+            display: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ========================
+           HERO SECTION
+           ======================== */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 2px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            50% { text-shadow: 0 0 40px rgba(0, 255, 240, 0.8), 0 0 10px var(--primary); }
+            100% { text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+        }
+
+        /* Floating Elements */
+        .floating-icons {
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .float-icon {
+            position: absolute;
+            color: rgba(0, 212, 255, 0.15);
+            font-size: 4rem;
+            animation: float 6s ease-in-out infinite;
+        }
+        .fi-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .fi-2 { top: 70%; left: 15%; animation-delay: 2s; font-size: 5rem;}
+        .fi-3 { top: 30%; right: 10%; animation-delay: 4s; font-size: 3rem;}
+        .fi-4 { top: 75%; right: 15%; animation-delay: 1s; }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* ========================
+           GRID LAYOUTS
+           ======================== */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+        /* ABOUT & CHOOSE MECHANICAL */
+        .feature-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--primary);
+        }
+        .feature-box h3 { margin-bottom: 1rem; color: var(--accent); }
+        .feature-box p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ROADMAP */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: ''; position: absolute; width: 4px; background: var(--secondary);
+            top: 0; bottom: 0; left: 50%; margin-left: -2px;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        .t-container {
+            padding: 10px 40px; position: relative; width: 50%;
+        }
+        .t-left { left: 0; }
+        .t-right { left: 50%; }
+        .t-container::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            background: var(--bg-color); border: 4px solid var(--primary);
+            border-radius: 50%; top: 15px; z-index: 1;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .t-left::after { right: -10px; }
+        .t-right::after { left: -10px; }
+        .t-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px; border-radius: 15px;
+            box-shadow: var(--glass-shadow);
+        }
+        .t-content h3 { color: var(--accent); margin-bottom: 10px; }
+        .t-content ul { list-style-position: inside; color: var(--text-muted); }
+
+        /* SUBJECTS */
+        .subject-tag {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .subject-tag:hover {
+            background: var(--primary); color: var(--bg-color);
+            box-shadow: 0 0 15px var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* CALCULATORS */
+        .calc-wrapper {
+            display: flex; gap: 2rem;
+            align-items: flex-start;
+        }
+        .calc-menu {
+            flex: 1;
+            display: flex; flex-direction: column; gap: 10px;
+            max-height: 600px; overflow-y: auto; padding-right: 10px;
+        }
+        .calc-btn {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            color: var(--text-main); padding: 15px; border-radius: 10px;
+            cursor: pointer; text-align: left; transition: all 0.3s;
+            font-family: 'Rajdhani', sans-serif; font-size: 1.1rem;
+        }
+        .calc-btn.active, .calc-btn:hover {
+            background: rgba(0, 212, 255, 0.2); border-color: var(--primary);
+            box-shadow: inset 4px 0 0 var(--primary);
+        }
+        .calc-display {
+            flex: 2;
+            background: var(--glass-bg); border: 1px solid var(--primary);
+            border-radius: 20px; padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--accent); font-weight: 500; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border); border-radius: 8px;
+            color: white; font-family: 'Poppins', sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 8px var(--primary);
+        }
+        .calc-result {
+            margin-top: 2rem; padding: 1.5rem;
+            background: rgba(122, 0, 255, 0.1); border-left: 4px solid var(--secondary);
+            border-radius: 8px; display: none;
+        }
+
+        /* DASHBOARD */
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .todo-list { list-style: none; margin-top: 1rem; max-height: 200px; overflow-y: auto; }
+        .todo-item {
+            background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px;
+            border-radius: 5px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .todo-item.done { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+        .todo-actions i { cursor: pointer; margin-left: 10px; color: var(--primary); }
+        .todo-actions i:hover { color: var(--accent); }
+        
+        .progress-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: conic-gradient(var(--primary) 75%, rgba(255,255,255,0.1) 0);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto; position: relative;
+        }
+        .progress-circle::before {
+            content: ''; position: absolute; inset: 10px;
+            background: var(--bg-color); border-radius: 50%;
+        }
+        .progress-text { position: relative; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+
+        /* RESOURCES & COLLEGES */
+        .resource-card { text-align: center; }
+        .resource-card i { font-size: 3rem; color: var(--secondary); margin-bottom: 1rem; }
+        .resource-card h3 { margin-bottom: 15px; }
+        
+        .college-card { position: relative; overflow: hidden; }
+        .college-card::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        .college-card:hover::before { left: 100%; }
+
+        /* FAQ */
+        .faq-search {
+            width: 100%; max-width: 600px; margin: 0 auto 2rem auto;
+            position: relative;
+        }
+        .faq-search input {
+            width: 100%; padding: 15px 20px; padding-left: 50px;
+            border-radius: 30px; border: 1px solid var(--primary);
+            background: var(--glass-bg); color: white; font-size: 1.1rem;
+        }
+        .faq-search i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem; }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            margin-bottom: 10px; border-radius: 10px; overflow: hidden;
+        }
+        .faq-question {
+            padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+        .faq-question:hover { background: rgba(0, 212, 255, 0.1); }
+        .faq-answer {
+            padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-muted);
+        }
+        .faq-item.active .faq-answer { padding: 15px 20px; max-height: 500px; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--primary); }
+
+        /* FOOTER */
+        footer {
+            background: rgba(5, 5, 8, 0.9);
+            border-top: 1px solid var(--primary);
+            padding: 3rem 5%; text-align: center;
+            position: relative;
+            box-shadow: 0 -5px 20px rgba(0, 212, 255, 0.1);
+        }
+        .footer-content h2 { color: var(--primary); margin-bottom: 10px; }
+        .footer-content p { color: var(--text-muted); margin-bottom: 20px; }
+        .social-icons a {
+            color: white; font-size: 1.5rem; margin: 0 10px; transition: color 0.3s, text-shadow 0.3s;
+        }
+        .social-icons a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+        .credits {
+            margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);
+            font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; letter-spacing: 1px;
+        }
+        .credits span { color: var(--primary); font-weight: bold; }
+
+        /* ========================
+           MEDIA QUERIES
+           ======================== */
+        @media (max-width: 992px) {
+            .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .hero-title { font-size: 3.5rem; }
+            .timeline::after { left: 31px; }
+            .t-container { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .t-right { left: 0; }
+            .t-left::after, .t-right::after { left: 21px; }
+            .calc-wrapper { flex-direction: column; }
+            .calc-menu { width: 100%; flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .calc-btn { white-space: nowrap; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed; top: 70px; right: -100%;
+                flex-direction: column; background: var(--bg-color);
+                width: 100%; text-align: center; padding: 2rem 0;
+                transition: right 0.4s ease; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { right: 0; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .btn { padding: 10px 20px; font-size: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .grid-4, .grid-3 { grid-template-columns: 1fr; }
+            .hero-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animation -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-gear"></i> ME HUB
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#calculators">Calculators</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#career">Career</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="menu-toggle" id="menuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="floating-icons">
+            <i class="fa-solid fa-cogs float-icon fi-1"></i>
+            <i class="fa-solid fa-wrench float-icon fi-2"></i>
+            <i class="fa-solid fa-car float-icon fi-3"></i>
+            <i class="fa-solid fa-robot float-icon fi-4"></i>
+        </div>
+        <div class="container hero-content reveal">
+            <h1 class="hero-title">MECHANICAL ENGINEERING HUB</h1>
+            <p class="hero-subtitle">Design &bull; Manufacture &bull; Innovate</p>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">The Ultimate Premium Workspace for SBTE Bihar Diploma Students. Master core engineering, thermodynamics, and robotics with our interactive tools.</p>
+            <div class="hero-buttons">
+                <a href="#calculators" class="btn">Launch Calculators</a>
+                <a href="#dashboard" class="btn btn-outline">Student Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2 class="section-title reveal">About Mechanical Engineering</h2>
+        <div class="grid-2 reveal">
+            <div class="glass-card">
+                <h3><i class="fa-solid fa-microscope"></i> What is Mechanical Engineering?</h3>
+                <p>Mechanical engineering is one of the broadest and oldest engineering disciplines. It applies the principles of physics and materials science for analysis, design, manufacturing, and maintenance of mechanical systems. It involves the production and usage of heat and mechanical power for the design, production, and operation of machines and tools.</p>
+            </div>
+            <div class="glass-card">
+                <h3><i class="fa-solid fa-network-wired"></i> Industry 4.0 & Future Scope</h3>
+                <p>The future of mechanical engineering lies in Industry 4.0, which encompasses automation, robotics, AI, IoT, and additive manufacturing (3D printing). Mechanical engineers are now leading the charge in renewable energy systems, mechatronics, electric vehicles (EVs), and advanced CAD/CAM software integrations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Mechanical / Sub-domains -->
+    <section id="why-mechanical" class="container">
+        <h2 class="section-title reveal">Core Domains</h2>
+        <div class="grid-4">
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-pen-ruler"></i><h3>Machine Design</h3><p>Kinematics, dynamics, and structural analysis of machinery.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-fire-flame-curved"></i><h3>Thermal Engg.</h3><p>Thermodynamics, heat transfer, and energy conversion.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-industry"></i><h3>Production Engg.</h3><p>Casting, welding, machining, and manufacturing processes.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-car-side"></i><h3>Automobile Engg.</h3><p>IC engines, vehicle dynamics, EVs and transmission systems.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-microchip"></i><h3>CAD/CAM</h3><p>Computer-Aided Design and Manufacturing technologies.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-robot"></i><h3>Robotics</h3><p>Design and automation of programmable machines.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-snowflake"></i><h3>HVAC</h3><p>Heating, Ventilation, and Air Conditioning systems.</p></div>
+            <div class="glass-card feature-box reveal"><i class="fa-solid fa-solar-panel"></i><h3>Power Plants</h3><p>Thermal, hydro, and nuclear power generation.</p></div>
+        </div>
+    </section>
+
+    <!-- SBTE Roadmap Section -->
+    <section id="roadmap" class="container">
+        <h2 class="section-title reveal">SBTE Bihar Roadmap</h2>
+        <div class="timeline">
+            <div class="t-container t-left reveal">
+                <div class="t-content">
+                    <h3>Semester 1 & 2</h3>
+                    <ul>
+                        <li>Engineering Mathematics</li>
+                        <li>Applied Physics & Chemistry</li>
+                        <li>Engineering Graphics</li>
+                        <li>Engineering Mechanics</li>
+                        <li>Workshop Practice</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="t-container t-right reveal">
+                <div class="t-content">
+                    <h3>Semester 3</h3>
+                    <ul>
+                        <li>Workshop Technology</li>
+                        <li>Machine Drawing</li>
+                        <li>Strength of Materials (SOM)</li>
+                        <li>Thermal Engineering-I</li>
+                        <li>Engineering Materials</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="t-container t-left reveal">
+                <div class="t-content">
+                    <h3>Semester 4</h3>
+                    <ul>
+                        <li>Theory of Machines (TOM)</li>
+                        <li>Manufacturing Process</li>
+                        <li>Fluid Mechanics & Machinery</li>
+                        <li>Thermal Engineering-II</li>
+                        <li>Measurements & Metrology</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="t-container t-right reveal">
+                <div class="t-content">
+                    <h3>Semester 5</h3>
+                    <ul>
+                        <li>Machine Design</li>
+                        <li>Automobile Engineering</li>
+                        <li>CAD / CAM</li>
+                        <li>Power Plant Engineering</li>
+                        <li>CNC Programming</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="t-container t-left reveal">
+                <div class="t-content">
+                    <h3>Semester 6</h3>
+                    <ul>
+                        <li>Industrial Engg & Management</li>
+                        <li>Hydraulics and Pneumatics</li>
+                        <li>Refrigeration and Air Conditioning</li>
+                        <li>Major Project & Seminar</li>
+                        <li>Industrial Training (In-Plant)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Matrix -->
+    <section id="subjects" class="container">
+        <h2 class="section-title reveal">Major Subjects Matrix</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;" class="reveal">
+            <div class="subject-tag">Engineering Mechanics</div>
+            <div class="subject-tag">Engineering Drawing</div>
+            <div class="subject-tag">Workshop Technology</div>
+            <div class="subject-tag">Strength of Materials</div>
+            <div class="subject-tag">Theory of Machines</div>
+            <div class="subject-tag">Machine Design</div>
+            <div class="subject-tag">Fluid Mechanics</div>
+            <div class="subject-tag">Thermal Engineering</div>
+            <div class="subject-tag">Heat Transfer</div>
+            <div class="subject-tag">Refrigeration & AC</div>
+            <div class="subject-tag">Automobile Engineering</div>
+            <div class="subject-tag">Industrial Engineering</div>
+            <div class="subject-tag">CAD / CAM</div>
+            <div class="subject-tag">Metrology</div>
+            <div class="subject-tag">Hydraulics & Pneumatics</div>
+        </div>
+    </section>
+
+    <!-- Calculators Section -->
+    <section id="calculators" class="container">
+        <h2 class="section-title reveal">Mechanical Calculators</h2>
+        <div class="calc-wrapper reveal">
+            <div class="calc-menu" id="calcMenu">
+                <!-- Populated by JS -->
+            </div>
+            <div class="calc-display" id="calcDisplay">
+                <h3 id="c-title" style="color:var(--primary); margin-bottom: 20px;">Select a Calculator</h3>
+                <div id="c-form">
+                    <p style="color:var(--text-muted);">Please select a calculator from the menu to perform engineering computations.</p>
+                </div>
+                <div class="calc-result" id="c-result"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Dashboard -->
+    <section id="dashboard" class="container">
+        <h2 class="section-title reveal">Student Dashboard</h2>
+        <div class="dash-grid">
+            <!-- SGPA Tracker -->
+            <div class="glass-card reveal">
+                <h3><i class="fa-solid fa-graduation-cap"></i> Quick SGPA Calculator</h3>
+                <div class="form-group" style="margin-top:1rem;">
+                    <label>Total Credits Obtained</label>
+                    <input type="number" id="sgpa-credits" placeholder="e.g. 180">
+                </div>
+                <div class="form-group">
+                    <label>Total Max Credits</label>
+                    <input type="number" id="sgpa-max" placeholder="e.g. 200">
+                </div>
+                <button class="btn" style="width:100%; padding:10px;" onclick="calculateSGPA()">Calculate SGPA</button>
+                <h4 id="sgpa-res" style="margin-top:15px; text-align:center; color:var(--accent);"></h4>
+            </div>
+
+            <!-- To-Do List -->
+            <div class="glass-card reveal">
+                <h3><i class="fa-solid fa-list-check"></i> Study To-Do</h3>
+                <div style="display:flex; gap:10px; margin-top:1rem;">
+                    <input type="text" id="todo-input" placeholder="Add task..." style="flex:1; padding:10px; border-radius:5px; border:1px solid var(--primary); background:rgba(0,0,0,0.5); color:white;">
+                    <button class="btn" style="padding:10px 15px;" onclick="addTodo()"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <ul class="todo-list" id="todo-list">
+                    <!-- JS populated -->
+                </ul>
+            </div>
+
+            <!-- Attendance Tracker -->
+            <div class="glass-card reveal">
+                <h3><i class="fa-solid fa-calendar-check"></i> Attendance Tracker</h3>
+                <div class="progress-circle" style="margin-top:20px;" id="att-circle">
+                    <div class="progress-text" id="att-text">75%</div>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Attended</label>
+                        <input type="number" id="att-attended" value="45" oninput="updateAttendance()">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Total</label>
+                        <input type="number" id="att-total" value="60" oninput="updateAttendance()">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Exam Countdown -->
+            <div class="glass-card reveal" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <h3><i class="fa-solid fa-stopwatch"></i> Next Exam In</h3>
+                <div style="font-size: 2.5rem; font-family: 'Orbitron'; font-weight: bold; color: var(--primary); margin-top: 1rem;" id="countdown">
+                    Loading...
+                </div>
+                <p style="color:var(--text-muted); margin-top:10px;">Semester Final Exams (Est.)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="container">
+        <h2 class="section-title reveal">Learning Resources</h2>
+        <div class="grid-4 reveal">
+            <div class="glass-card resource-card"><i class="fa-solid fa-file-pdf"></i><h3>Premium Notes</h3><p>Chapter-wise subject notes.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-book-open"></i><h3>PDF Books</h3><p>R.S. Khurmi, R.K. Rajput.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-drafting-compass"></i><h3>Machine Drawing</h3><p>Assembly & component sheets.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-screwdriver-wrench"></i><h3>Lab Manuals</h3><p>Lathe, CNC, TOM practicals.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-clock-rotate-left"></i><h3>PYQs</h3><p>Last 10 years SBTE papers.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-list"></i><h3>Syllabus</h3><p>Updated SBTE curriculum.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-chalkboard-user"></i><h3>Assignments</h3><p>Practice sheets & solutions.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-star"></i><h3>Model Papers</h3><p>Expected questions for exams.</p></div>
+        </div>
+    </section>
+
+    <!-- Colleges -->
+    <section id="colleges" class="container">
+        <h2 class="section-title reveal">Top Govt. Polytechnic (Bihar)</h2>
+        <div class="grid-3 reveal">
+            <div class="glass-card college-card">
+                <h3>NGP Patna (13)</h3><p>Premier institute with robust workshops.</p>
+            </div>
+            <div class="glass-card college-card">
+                <h3>GP Barauni</h3><p>Close to IOCL, great mechanical exposure.</p>
+            </div>
+            <div class="glass-card college-card">
+                <h3>GP Muzaffarpur</h3><p>Excellent manufacturing labs.</p>
+            </div>
+            <div class="glass-card college-card">
+                <h3>GP Bhagalpur</h3><p>Oldest campus with rich mechanical history.</p>
+            </div>
+            <div class="glass-card college-card">
+                <h3>GP Darbhanga</h3><p>Strong alumni in PSUs and Auto sector.</p>
+            </div>
+            <div class="glass-card college-card">
+                <h3>GP Gaya</h3><p>Modern CNC & CAD/CAM facilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career -->
+    <section id="career" class="container">
+        <h2 class="section-title reveal">Career & Placements</h2>
+        <div class="grid-2 reveal">
+            <div class="glass-card">
+                <h3 style="color:var(--primary); margin-bottom:1rem;"><i class="fa-solid fa-building-columns"></i> Government Jobs & PSUs</h3>
+                <ul style="list-style:none; line-height:2;">
+                    <li><i class="fa-solid fa-check text-accent"></i> <strong>SSC JE / RRB JE:</strong> Core mechanical recruitment</li>
+                    <li><i class="fa-solid fa-check text-accent"></i> <strong>ISRO / DRDO / BARC:</strong> Technical Assistant posts</li>
+                    <li><i class="fa-solid fa-check text-accent"></i> <strong>Maharatna PSUs:</strong> BHEL, SAIL, NTPC, GAIL, ONGC</li>
+                    <li><i class="fa-solid fa-check text-accent"></i> <strong>State Departments:</strong> PHED, WRD (Irrigation pumps)</li>
+                    <li><i class="fa-solid fa-check text-accent"></i> <strong>Defense:</strong> Military Engineering Services (MES)</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <h3 style="color:var(--secondary); margin-bottom:1rem;"><i class="fa-solid fa-industry"></i> Private Sector</h3>
+                <ul style="list-style:none; line-height:2;">
+                    <li><i class="fa-solid fa-car text-accent"></i> Tata Motors, Mahindra & Mahindra, Maruti Suzuki</li>
+                    <li><i class="fa-solid fa-motorcycle text-accent"></i> Hero MotoCorp, Bajaj Auto, TVS</li>
+                    <li><i class="fa-solid fa-gear text-accent"></i> Bosch, L&T Heavy Engineering, Cummins</li>
+                    <li><i class="fa-solid fa-fan text-accent"></i> Voltas, Blue Star (HVAC)</li>
+                    <li><i class="fa-solid fa-robot text-accent"></i> Automation & CNC Programming firms</li>
+                </ul>
+                <div style="margin-top:15px; padding:10px; background:rgba(0,255,240,0.1); border-left:3px solid var(--accent);">
+                    <strong>Starting Salary:</strong> ₹2.5L - ₹5.0L LPA (Diploma)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Center & Projects -->
+    <section id="ai-center" class="container">
+        <h2 class="section-title reveal">AI & Projects Hub</h2>
+        <div class="grid-2 reveal">
+            <div class="glass-card">
+                <h3><i class="fa-solid fa-brain"></i> AI Learning Center</h3>
+                <p style="margin-bottom: 15px; color:var(--text-muted);">Leverage AI for mechanical design, simulation, and coding:</p>
+                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <span class="subject-tag" style="padding:5px 10px; font-size:0.9rem;">ChatGPT (Thermodynamics)</span>
+                    <span class="subject-tag" style="padding:5px 10px; font-size:0.9rem;">Claude (CNC Code)</span>
+                    <span class="subject-tag" style="padding:5px 10px; font-size:0.9rem;">Gemini (Research)</span>
+                    <span class="subject-tag" style="padding:5px 10px; font-size:0.9rem;">Copilot (CAD Plugins)</span>
+                    <span class="subject-tag" style="padding:5px 10px; font-size:0.9rem;">Prompt Engineering</span>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3><i class="fa-solid fa-rocket"></i> Major Projects</h3>
+                <ul style="list-style-type:circle; padding-left:20px; color:var(--text-muted); line-height:1.8;">
+                    <li>Design & Fab of Go-Kart / ATV (BAJA)</li>
+                    <li>Pneumatic / Hydraulic Robotic Arm</li>
+                    <li>Solar Powered Refrigeration System</li>
+                    <li>Automated Material Handling Conveyor</li>
+                    <li>Power Generation using Speed Breakers</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Placement Preparation -->
+    <section id="placement" class="container">
+        <h2 class="section-title reveal">Placement Preparation</h2>
+        <div class="grid-4 reveal">
+            <div class="glass-card resource-card"><i class="fa-solid fa-users"></i><h3>HR Interview</h3><p>Mock sessions & soft skills.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-laptop-code"></i><h3>Technical Aptitude</h3><p>Core mechanical MCQs.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-puzzle-piece"></i><h3>Reasoning</h3><p>Analytical & logical puzzles.</p></div>
+            <div class="glass-card resource-card"><i class="fa-solid fa-file-contract"></i><h3>Resume Tips</h3><p>ATS-friendly formats.</p></div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="container">
+        <h2 class="section-title reveal">FAQ Knowledge Base</h2>
+        <div class="faq-search reveal">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="faqSearch" placeholder="Search 50+ Mechanical Engineering FAQs...">
+        </div>
+        <div class="faq-container reveal" id="faqContainer">
+            <!-- Populated via JS to ensure 50 exact items efficiently without bloat -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <h2>MECHANICAL ENGINEERING HUB</h2>
+            <p>Empowering Diploma Mechanical Engineers of Bihar with world-class digital tools and resources.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+            </div>
+            <div class="credits">
+                Developer: <span>Lalan Kumar</span><br>
+                Powered By: <span>LK STUDY STUDIO</span> &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // 1. UI ANIMATIONS & NAVIGATION
+            // ==========================================
+            
+            // Mobile Menu Toggle
+            const menuBtn = document.getElementById('menuBtn');
+            const navLinks = document.getElementById('navLinks');
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Scroll Reveal Animation using Intersection Observer
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+            reveals.forEach(reveal => revealObserver.observe(reveal));
+
+            // Navbar Glass Effect on Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.style.background = 'rgba(11, 11, 15, 0.95)';
+                    navbar.style.boxShadow = '0 5px 20px rgba(0, 212, 255, 0.2)';
+                } else {
+                    navbar.style.background = 'rgba(11, 11, 15, 0.8)';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+
+            // ==========================================
+            // 2. MATRIX BACKGROUND CANVAS (Mechanical Theme)
+            // ==========================================
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Using binary, hex, and math symbols suited for engineering
+            const chars = '0123456789ABCDEF∑π∆Ωαβγμηρτφω⚙⏣';
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            for (let x = 0; x < columns; x++) drops[x] = 1;
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(11, 11, 15, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00D4FF'; // primary color
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+                        drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 50);
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+
+            // ==========================================
+            // 3. MECHANICAL CALCULATORS ENGINE
+            // ==========================================
+            const calculators = [
+                { id: 'rpm', name: 'Cutting Speed & RPM', icon: 'fa-rotate', 
+                  html: `
+                    <div class="form-group">
+                        <label>Cutting Speed (V) in m/min</label>
+                        <input type="number" id="calc-v" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>Diameter of Workpiece/Cutter (D) in mm</label>
+                        <input type="number" id="calc-d" value="50">
+                    </div>
+                    <button class="btn" onclick="runCalc('rpm')">Calculate RPM (N)</button>
+                  `,
+                  calcFn: () => {
+                      const v = parseFloat(document.getElementById('calc-v').value);
+                      const d = parseFloat(document.getElementById('calc-d').value);
+                      if(!v || !d) return 'Please enter valid values.';
+                      // Formula: V = (π * D * N) / 1000 => N = (1000 * V) / (π * D)
+                      const n = (1000 * v) / (Math.PI * d);
+                      return `Required Spindle Speed (N): <br><b style="font-size:1.5rem;color:var(--accent);">${n.toFixed(2)} RPM</b>`;
+                  }
+                },
+                { id: 'power', name: 'Torque & Power', icon: 'fa-bolt',
+                  html: `
+                    <div class="form-group"><label>Torque (T) in Nm</label><input type="number" id="calc-t" value="150"></div>
+                    <div class="form-group"><label>Speed (N) in RPM</label><input type="number" id="calc-n" value="1500"></div>
+                    <button class="btn" onclick="runCalc('power')">Calculate Power (P)</button>
+                  `,
+                  calcFn: () => {
+                      const t = parseFloat(document.getElementById('calc-t').value);
+                      const n = parseFloat(document.getElementById('calc-n').value);
+                      if(!t || !n) return 'Invalid inputs.';
+                      // Power P = (2 * π * N * T) / 60 in Watts
+                      const p = (2 * Math.PI * n * t) / 60;
+                      const kW = p / 1000;
+                      const hp = kW * 1.34102;
+                      return `Power Generated: <br><b>${p.toFixed(2)} Watts</b><br><b>${kW.toFixed(2)} kW</b><br><b>${hp.toFixed(2)} HP</b>`;
+                  }
+                },
+                { id: 'stress', name: 'Stress & Strain', icon: 'fa-compress',
+                  html: `
+                    <div class="form-group"><label>Applied Force (F) in Newtons</label><input type="number" id="calc-f" value="5000"></div>
+                    <div class="form-group"><label>Cross-sectional Area (A) in mm²</label><input type="number" id="calc-a" value="100"></div>
+                    <div class="form-group"><label>Original Length (L) in mm</label><input type="number" id="calc-l" value="200"></div>
+                    <div class="form-group"><label>Change in Length (ΔL) in mm</label><input type="number" id="calc-dl" value="0.5"></div>
+                    <button class="btn" onclick="runCalc('stress')">Calculate</button>
+                  `,
+                  calcFn: () => {
+                      const f = parseFloat(document.getElementById('calc-f').value);
+                      const a = parseFloat(document.getElementById('calc-a').value);
+                      const l = parseFloat(document.getElementById('calc-l').value);
+                      const dl = parseFloat(document.getElementById('calc-dl').value);
+                      
+                      const stress = f / a; // N/mm² or MPa
+                      const strain = dl / l; // Unitless
+                      const youngsModulus = stress / strain;
+                      
+                      return `<b>Stress (σ):</b> ${stress.toFixed(2)} N/mm² (MPa)<br>
+                              <b>Strain (ε):</b> ${strain.toFixed(6)}<br>
+                              <b>Young's Modulus (E):</b> ${youngsModulus.toFixed(2)} MPa`;
+                  }
+                },
+                { id: 'gear', name: 'Gear Ratio', icon: 'fa-cogs',
+                  html: `
+                    <div class="form-group"><label>Driver Gear Teeth (T1)</label><input type="number" id="calc-t1" value="20"></div>
+                    <div class="form-group"><label>Driven Gear Teeth (T2)</label><input type="number" id="calc-t2" value="60"></div>
+                    <div class="form-group"><label>Driver Speed (RPM)</label><input type="number" id="calc-n1" value="1200"></div>
+                    <button class="btn" onclick="runCalc('gear')">Calculate</button>
+                  `,
+                  calcFn: () => {
+                      const t1 = parseFloat(document.getElementById('calc-t1').value);
+                      const t2 = parseFloat(document.getElementById('calc-t2').value);
+                      const n1 = parseFloat(document.getElementById('calc-n1').value);
+                      
+                      const ratio = t2 / t1;
+                      const n2 = n1 / ratio;
+                      
+                      return `<b>Gear Ratio:</b> ${ratio.toFixed(2)}:1<br>
+                              <b>Driven Gear Speed:</b> ${n2.toFixed(2)} RPM<br>
+                              <i>(Note: Torque multiplies by the gear ratio, ignoring losses)</i>`;
+                  }
+                },
+                { id: 'engine', name: 'Engine Displacement', icon: 'fa-car',
+                  html: `
+                    <div class="form-group"><label>Bore Diameter (mm)</label><input type="number" id="calc-bore" value="80"></div>
+                    <div class="form-group"><label>Stroke Length (mm)</label><input type="number" id="calc-stroke" value="90"></div>
+                    <div class="form-group"><label>Number of Cylinders</label><input type="number" id="calc-cyl" value="4"></div>
+                    <button class="btn" onclick="runCalc('engine')">Calculate</button>
+                  `,
+                  calcFn: () => {
+                      const bore = parseFloat(document.getElementById('calc-bore').value) / 10; // convert to cm
+                      const stroke = parseFloat(document.getElementById('calc-stroke').value) / 10; // convert to cm
+                      const cyl = parseFloat(document.getElementById('calc-cyl').value);
+                      
+                      // Volume = (π/4) * D² * L * N
+                      const vol = (Math.PI / 4) * Math.pow(bore, 2) * stroke * cyl;
+                      const liters = vol / 1000;
+                      
+                      return `Total Engine Displacement:<br>
+                              <b>${vol.toFixed(2)} cc (cm³)</b><br>
+                              <b>${liters.toFixed(2)} Liters</b>`;
+                  }
+                }
+            ];
+
+            const calcMenu = document.getElementById('calcMenu');
+            const cTitle = document.getElementById('c-title');
+            const cForm = document.getElementById('c-form');
+            const cResult = document.getElementById('c-result');
+
+            calculators.forEach((calc, index) => {
+                const btn = document.createElement('button');
+                btn.className = `calc-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<i class="fa-solid ${calc.icon}" style="width:25px;"></i> ${calc.name}`;
+                btn.onclick = () => loadCalc(index);
+                calcMenu.appendChild(btn);
+            });
+
+            // Make generic calculation engine accessible globally
+            window.currentCalcIndex = 0;
+            window.loadCalc = (index) => {
+                document.querySelectorAll('.calc-btn').forEach(b => b.classList.remove('active'));
+                calcMenu.children[index].classList.add('active');
+                cTitle.innerHTML = calculators[index].name;
+                cForm.innerHTML = calculators[index].html;
+                cResult.style.display = 'none';
+                window.currentCalcIndex = index;
+            };
+            window.runCalc = () => {
+                const result = calculators[window.currentCalcIndex].calcFn();
+                cResult.innerHTML = result;
+                cResult.style.display = 'block';
+            };
+            
+            // Init first calc
+            loadCalc(0);
+
+            // ==========================================
+            // 4. STUDENT DASHBOARD
+            // ==========================================
+            
+            // SGPA
+            window.calculateSGPA = () => {
+                const credits = parseFloat(document.getElementById('sgpa-credits').value);
+                const max = parseFloat(document.getElementById('sgpa-max').value);
+                if(credits && max && max >= credits) {
+                    const sgpa = (credits / max) * 10;
+                    document.getElementById('sgpa-res').innerText = `Estimated SGPA: ${sgpa.toFixed(2)}`;
+                } else {
+                    document.getElementById('sgpa-res').innerText = `Please enter valid numbers.`;
+                }
+            };
+
+            // Attendance
+            const attCircle = document.getElementById('att-circle');
+            const attText = document.getElementById('att-text');
+            window.updateAttendance = () => {
+                const att = parseFloat(document.getElementById('att-attended').value) || 0;
+                const tot = parseFloat(document.getElementById('att-total').value) || 1;
+                let perc = Math.min(Math.round((att/tot)*100), 100);
+                attText.innerText = `${perc}%`;
+                let color = perc >= 75 ? 'var(--primary)' : 'red';
+                attText.style.color = color;
+                attCircle.style.background = `conic-gradient(${color} ${perc}%, rgba(255,255,255,0.1) 0)`;
+            };
+            updateAttendance();
+
+            // To-Do List with LocalStorage
+            const todoInput = document.getElementById('todo-input');
+            const todoList = document.getElementById('todo-list');
+            let todos = JSON.parse(localStorage.getItem('me_todos')) || [
+                { text: 'Complete Machine Design Assignment', done: false },
+                { text: 'Revise Thermodynamics Cycles', done: true }
+            ];
+
+            const renderTodos = () => {
+                todoList.innerHTML = '';
+                todos.forEach((t, i) => {
+                    todoList.innerHTML += `
+                        <li class="todo-item ${t.done ? 'done' : ''}">
+                            <span onclick="toggleTodo(${i})" style="cursor:pointer; flex:1;">${t.text}</span>
+                            <div class="todo-actions">
+                                <i class="fa-solid fa-trash" onclick="deleteTodo(${i})"></i>
+                            </div>
+                        </li>
+                    `;
+                });
+                localStorage.setItem('me_todos', JSON.stringify(todos));
+            };
+            
+            window.addTodo = () => {
+                if(todoInput.value.trim() !== '') {
+                    todos.push({ text: todoInput.value, done: false });
+                    todoInput.value = '';
+                    renderTodos();
+                }
+            };
+            window.toggleTodo = (i) => { todos[i].done = !todos[i].done; renderTodos(); };
+            window.deleteTodo = (i) => { todos.splice(i, 1); renderTodos(); };
+            
+            renderTodos();
+
+            // Exam Countdown (Dummy target: July 15, 2026)
+            const targetDate = new Date("July 15, 2026 00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                if(distance < 0) {
+                    document.getElementById("countdown").innerHTML = "EXAMS STARTED!";
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m`;
+            }, 1000);
+
+
+            // ==========================================
+            // 5. FAQ GENERATOR & SEARCH
+            // ==========================================
+            const rawFaqs = [
+                ["What is Thermodynamics?", "The branch of physics that deals with the relationships between heat and other forms of energy."],
+                ["What is the First Law of Thermodynamics?", "Energy can neither be created nor destroyed; it can only be transferred or changed from one form to another."],
+                ["What is the Second Law of Thermodynamics?", "Heat cannot spontaneously flow from a colder location to a hotter location (Clausius statement). Entropy of an isolated system always increases."],
+                ["What is an IC Engine?", "An Internal Combustion engine generates motive power by the burning of fuel (like petrol or diesel) inside the engine cylinders."],
+                ["What is the difference between a 2-stroke and 4-stroke engine?", "A 2-stroke engine completes a power cycle in one revolution of the crankshaft (two strokes of the piston). A 4-stroke engine takes two revolutions (four strokes: intake, compression, power, exhaust)."],
+                ["What is the Otto Cycle?", "The ideal thermodynamic cycle that describes the functioning of a typical spark ignition piston engine (Petrol Engine)."],
+                ["What is the Diesel Cycle?", "The ideal thermodynamic cycle for a compression ignition engine where fuel is ignited by heat generated during the compression of air."],
+                ["What is Carnot Cycle?", "A theoretical thermodynamic cycle proposed by Nicolas Léonard Sadi Carnot. It represents the maximum possible efficiency that a heat engine can achieve."],
+                ["What is fluid mechanics?", "The study of fluids (liquids, gases, and plasmas) and the forces on them."],
+                ["What is Bernoulli's Principle?", "For an inviscid flow of a nonconducting fluid, an increase in the speed of the fluid occurs simultaneously with a decrease in pressure or a decrease in the fluid's potential energy."],
+                ["What is Reynolds Number?", "A dimensionless quantity that helps predict flow patterns in different fluid flow situations (laminar vs turbulent)."],
+                ["What is the difference between a pump and a compressor?", "A pump transfers liquids (incompressible fluids), while a compressor transfers and pressurizes gases (compressible fluids)."],
+                ["What is cavitation in pumps?", "The formation of vapor bubbles in a liquid when the local pressure falls below the vapor pressure, leading to pitting and damage to the impeller."],
+                ["What is a turbine?", "A rotary mechanical device that extracts energy from a fluid flow and converts it into useful work."],
+                ["What is Pascal's Law?", "A pressure change occurring anywhere in a confined incompressible fluid is transmitted throughout the fluid such that the same change occurs everywhere."],
+                ["What is Stress?", "The internal restoring force per unit area set up in a body when it is deformed by an external force. (Stress = Force / Area)"],
+                ["What is Strain?", "The ratio of change in dimension to the original dimension of a body subjected to external forces."],
+                ["What is Hooke's Law?", "Within the elastic limit, stress is directly proportional to strain."],
+                ["What is Young's Modulus?", "A measure of elasticity, equal to the ratio of the stress acting on a substance to the strain produced. (E = Stress / Strain)"],
+                ["What is Yield Strength?", "The stress at which a material begins to deform plastically. Prior to the yield point, the material will deform elastically."],
+                ["What is Ultimate Tensile Strength (UTS)?", "The maximum stress that a material can withstand while being stretched or pulled before breaking."],
+                ["What is Creep in materials?", "The tendency of a solid material to move slowly or deform permanently under the influence of persistent mechanical stresses (especially at high temperatures)."],
+                ["What is Fatigue?", "The weakening of a material caused by repeatedly applied loads. It is the progressive and localized structural damage that occurs when a material is subjected to cyclic loading."],
+                ["What is the difference between shear force and bending moment?", "Shear force is the algebraic sum of the vertical forces acting to the left or right of a section. Bending moment is the algebraic sum of the moments of these forces."],
+                ["What is a Lathe Machine?", "A machine tool that rotates a workpiece about an axis of rotation to perform various operations such as cutting, sanding, knurling, drilling, or deformation."],
+                ["What is Milling?", "The machining process of using rotary cutters to remove material from a workpiece advancing in a direction at an angle with the axis of the tool."],
+                ["What is Casting?", "A manufacturing process in which a liquid material is usually poured into a mold, which contains a hollow cavity of the desired shape, and then allowed to solidify."],
+                ["What is Forging?", "A manufacturing process involving the shaping of metal using localized compressive forces (like hammering)."],
+                ["What is Welding?", "A fabrication process that joins materials, usually metals or thermoplastics, by using high heat to melt the parts together and allowing them to cool causing fusion."],
+                ["What is TIG vs MIG welding?", "TIG (Tungsten Inert Gas) uses a non-consumable tungsten electrode. MIG (Metal Inert Gas) uses a consumable wire electrode."],
+                ["What is CNC?", "Computer Numerical Control is the automated control of machining tools (drills, boring tools, lathes) by means of a computer."],
+                ["What is CAD/CAM?", "Computer-Aided Design (CAD) is the use of computers to create, modify, analyze, or optimize a design. Computer-Aided Manufacturing (CAM) uses software to control machine tools."],
+                ["What is limits, fits, and tolerances?", "Tolerance is the allowable variation for any given size. Fit is the relationship between two mating parts. Limits are the maximum and minimum sizes allowed."],
+                ["What is a gear?", "A rotating machine part having cut teeth which mesh with another toothed part to transmit torque."],
+                ["What is the function of a clutch?", "A mechanical device that engages and disengages power transmission, especially from a driving shaft to a driven shaft."],
+                ["What is a differential in automobiles?", "A gear train with three shafts that has the property that the rotational speed of one shaft is the average of the speeds of the others, allowing outer drive wheels to rotate faster than inner ones during turns."],
+                ["What is the Carnot efficiency limit?", "Efficiency = 1 - (Tc / Th), where Tc is the absolute temperature of the cold reservoir and Th is the absolute temperature of the hot reservoir."],
+                ["What is Enthalpy?", "A thermodynamic quantity equivalent to the total heat content of a system. It is equal to the internal energy of the system plus the product of pressure and volume."],
+                ["What is Entropy?", "A thermodynamic quantity representing the unavailability of a system's thermal energy for conversion into mechanical work; often interpreted as the degree of disorder or randomness in the system."],
+                ["What is Refrigeration?", "The process of removing heat from an enclosed space or from a substance to lower its temperature."],
+                ["What is a ton of refrigeration (TR)?", "A unit of power used to describe the heat-extraction capacity of refrigeration and air conditioning equipment. 1 TR = 3.517 kW."],
+                ["What is Cast Iron vs Steel?", "Cast iron typically contains more than 2% carbon, making it brittle but good for casting. Steel contains less than 2% carbon, making it ductile and strong."],
+                ["What is Heat Treatment?", "Heating and cooling of metals to change their physical and mechanical properties without changing their shape (e.g., Annealing, Quenching, Tempering)."],
+                ["What is Annealing?", "Heating a metal and allowing it to cool slowly, in order to remove internal stresses and toughen it."],
+                ["What is a boiler?", "A closed vessel in which fluid (generally water) is heated. The fluid does not necessarily boil. The heated or vaporized fluid exits the boiler for use in various processes."],
+                ["What is a spark plug vs fuel injector?", "Spark plugs ignite the air-fuel mixture in petrol engines using an electric spark. Fuel injectors spray fuel directly into the combustion chamber (or intake) in both petrol and diesel engines."],
+                ["What is viscosity?", "A measure of a fluid's resistance to gradual deformation by shear stress or tensile stress. In simple terms, fluid friction or 'thickness'."],
+                ["What is a flywheel?", "A heavy revolving wheel in a machine that is used to increase the machine's momentum and thereby provide greater stability or a reserve of available power during interruptions in the driving power."],
+                ["What is Mechatronics?", "A multidisciplinary branch of engineering that focuses on the engineering of both electrical and mechanical systems, and also includes a combination of robotics, electronics, computer, telecommunications, systems, control, and product engineering."],
+                ["Is diploma enough for working in Tata Motors?", "Yes, companies like Tata Motors frequently hire Diploma Mechanical Engineers for roles like Diploma Engineer Trainee (DET), Supervisor, or Junior Engineer."]
+            ];
+
+            const faqContainer = document.getElementById('faqContainer');
+            const faqSearch = document.getElementById('faqSearch');
+
+            const renderFaqs = (filterText = '') => {
+                faqContainer.innerHTML = '';
+                let count = 0;
+                rawFaqs.forEach((faq) => {
+                    if (faq[0].toLowerCase().includes(filterText.toLowerCase()) || faq[1].toLowerCase().includes(filterText.toLowerCase())) {
+                        count++;
+                        const div = document.createElement('div');
+                        div.className = 'faq-item';
+                        div.innerHTML = `
+                            <div class="faq-question">
+                                <span>${faq[0]}</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>${faq[1]}</p>
+                            </div>
+                        `;
+                        faqContainer.appendChild(div);
+                        
+                        // Accordion event
+                        div.querySelector('.faq-question').addEventListener('click', () => {
+                            const isActive = div.classList.contains('active');
+                            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                            if(!isActive) div.classList.add('active');
+                        });
+                    }
+                });
+                if (count === 0) {
+                    faqContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No FAQs found matching your search.</p>';
+                }
+            };
+            
+            renderFaqs();
+
+            faqSearch.addEventListener('input', (e) => {
+                renderFaqs(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
